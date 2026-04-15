@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalorieSnap — Дневник питания с ИИ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #121212;
+      --primary: #dd1510;
+      --text: #ffffff;
+      --secondary: #b3b3b3;
+      --card-border: #222222;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .logo { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; }
+    .logo span { color: var(--primary); }
+
+    .lang-selector {
+      background: #222;
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 32px 24px 56px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.9rem, 6vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 span { color: var(--primary); }
+
+    .hero > p {
+      font-size: 1rem;
+      color: var(--secondary);
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-download:hover { background: #c01210; }
+
+    .features {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .features p {
+      color: var(--secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .features p strong { color: var(--text); }
+
+    .features h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 40px 0 14px;
+      letter-spacing: -0.3px;
+    }
+
+    .features h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 32px 0 10px;
+    }
+
+    .features ol,
+    .features ul {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .features ol { counter-reset: steps; }
+
+    .features ol li {
+      counter-increment: steps;
+      color: var(--secondary);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      padding-left: 32px;
+      position: relative;
+    }
+
+    .features ol li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .features ul li {
+      color: var(--secondary);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .features ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 5px;
+      height: 5px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .features ol li strong,
+    .features ul li strong { color: var(--text); }
+
+    .features > p:last-of-type {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .privacy-link {
+      text-align: center;
+      padding: 0 24px 56px;
+    }
+
+    .privacy-link a {
+      font-size: 0.82rem;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .privacy-link a:hover { color: var(--secondary); }
+
+    @media (max-width: 400px) {
+      .hero h1 { font-size: 1.7rem; }
+      .features h2 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><span>Calorie</span>Snap</div>
+    <select id="lang-switcher" class="lang-selector">
+  <option value="ru">Русский</option>
+  <option value="uk">Українська</option>
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="de">Deutsch</option>
+  <option value="pl">Polski</option>
+  <option value="ja">日本語</option>
+  <option value="zh">中文</option>
+</select>
+  </header>
+
+  <section class="hero">
+    <h1><span>CalorieSnap</span> <span data-i18n="hero_title">— дневник питания с ИИ</span></h1>
+    <p data-i18n="hero_subtitle">Фото еды → КБЖУ за секунды. Норма, история, состав.</p>
+    <a href="#" class="btn-download">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M3.18 23.76c.3.17.65.2.98.08l11.65-6.73-2.48-2.48-10.15 9.13zM.54 1.26C.2 1.6 0 2.14 0 2.84v18.32c0 .7.2 1.24.55 1.57l.08.08 10.26-10.26v-.24L.62 1.18l-.08.08zM20.1 9.37l-2.93-1.7-2.77 2.77 2.77 2.77 2.95-1.7c.84-.49.84-1.28-.02-1.14zM4.16.24L15.81 6.97l-2.48 2.48L3.18.32a1.1 1.1 0 0 1 .98-.08z" fill="currentColor"/>
+      </svg>
+      <span data-i18n="btn_download">Скачать в Google Play</span>
+    </a>
+  </section>
+
+  <section class="features">
+    <p data-i18n="features_intro">
+      Устали вручную записывать каждый продукт?
+      <strong>CalorieSnap</strong> — счётчик калорий с ИИ, который делает ведение
+      дневника питания простым и быстрым. Сфотографируйте блюдо, напишите его
+      название или покажите состав на упаковке — искусственный интеллект всё
+      посчитает за вас.
+    </p>
+
+    <h2 data-i18n="how_it_works">✨ Как это работает</h2>
+    <p data-i18n="three_steps">Три шага — и готово:</p>
+    <ol>
+      <li data-i18n="step_1"><strong>Добавьте блюдо</strong> — сфотографируйте еду, сфотографируйте упаковку с составом или просто напишите «банан 150 г».</li>
+      <li data-i18n="step_2"><strong>ИИ считает за вас</strong> — Gemini определяет каждый ингредиент и возвращает калории, белки, жиры и углеводы с разбивкой по составу.</li>
+      <li data-i18n="step_3"><strong>Смотрите историю</strong> — блюда сохраняются в дневнике по дням, с фотографиями и полным составом.</li>
+    </ol>
+
+    <h3 data-i18n="three_ways">📸 Три способа добавить блюдо</h3>
+    <ul>
+      <li data-i18n="way_1"><strong>Фото блюда</strong> — сфотографируйте тарелку, ИИ распознает, что на ней, и посчитает КБЖУ.</li>
+      <li data-i18n="way_2"><strong>Фото упаковки</strong> — направьте камеру на этикетку с составом, приложение считает все цифры.</li>
+      <li data-i18n="way_3"><strong>Текстом</strong> — напишите название и граммы, ИИ вернёт точный расчёт.</li>
+    </ul>
+
+    <h3 data-i18n="screen_today_title">📅 Экран «Сегодня»</h3>
+    <p data-i18n="screen_today_desc">Все блюда, которые вы ели сегодня, в одном списке. Нажмите на любое блюдо — увидите полный состав ингредиентов с граммами и КБЖУ каждого. Фотографии хранятся 24 часа и удаляются автоматически.</p>
+
+    <h3 data-i18n="screen_history_title">📆 Экран «История»</h3>
+    <p data-i18n="screen_history_desc">Календарь с цветовой разметкой: зелёный день — норма калорий соблюдена, красный — превышена, серый — данных нет. Выберите любой день — увидите список блюд и их состав. Переключите период на неделю или месяц — получите суммарное потребление КБЖУ и сравнение с вашей нормой.</p>
+
+    <h3 data-i18n="screen_ingredients_title">📋 Экран «Ингредиенты»</h3>
+    <p data-i18n="screen_ingredients_desc">Сводная таблица всех ингредиентов за выбранный период: сегодня, прошлая неделя, месяц или год. Если вы ели гречку пять раз за неделю — она появится одной строкой с суммарными граммами и КБЖУ. В верхней части списка — самые калорийные продукты вашего рациона.</p>
+
+    <h3 data-i18n="personal_norm_title">🎯 Персональная норма калорий</h3>
+    <p data-i18n="personal_norm_desc">При регистрации укажите возраст, вес, рост, пол и цель — похудение, поддержание веса или набор массы. Приложение рассчитает вашу индивидуальную норму калорий и БЖУ на день. Данные можно обновить в профиле в любой момент.</p>
+
+    <h3 data-i18n="extra_title">⚙️ Дополнительно</h3>
+    <ul>
+      <li data-i18n="extra_1">Поддержка 8 языков интерфейса</li>
+      <li data-i18n="extra_2">Регистрация и вход по email — без лишних данных и спама</li>
+      <li data-i18n="extra_3">Всё работает быстро и без сложных настроек</li>
+    </ul>
+
+    <h3 data-i18n="for_whom_title">Для кого это приложение?</h3>
+    <ul>
+      <li data-i18n="for_whom_1">Для тех, кто хочет похудеть и видеть реальный дефицит калорий</li>
+      <li data-i18n="for_whom_2">Для тех, кто набирает мышечную массу и следит за белком</li>
+      <li data-i18n="for_whom_3">Для тех, кто хочет понять, что именно входит в их рацион</li>
+      <li data-i18n="for_whom_4">Для всех, кто ценит своё время и не хочет тратить его на таблицы</li>
+    </ul>
+
+    <p data-i18n="download_cta" style="margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--card-border);">
+      Скачайте <strong>CalorieSnap</strong> — и начните понимать своё питание уже сегодня.
+    </p>
+  </section>
+
+  <div class="privacy-link">
+    <a href="privacy.html" data-i18n="privacy_policy">Политика конфиденциальности</a>
+  </div>
+
+  <script>
+    const translations = {
+      ru: {
+        hero_title: "— дневник питания с ИИ",
+        hero_subtitle: "Фото еды → КБЖУ за секунды. Норма, история, состав.",
+        btn_download: "Скачать в Google Play",
+        features_intro: "Устали вручную записывать каждый продукт? <strong>CalorieSnap</strong> — счётчик калорий с ИИ, который делает ведение дневника питания простым и быстрым. Сфотографируйте блюдо, напишите его название или покажите состав на упаковке — искусственный интеллект всё посчитает за вас.",
+        how_it_works: "✨ Как это работает",
+        three_steps: "Три шага — и готово:",
+        step_1: "<strong>Добавьте блюдо</strong> — сфотографируйте еду, упаковку с составом или напишите «банан 150 г».",
+        step_2: "<strong>ИИ считает за вас</strong> — нейросеть определяет каждый ингредиент и возвращает КБЖУ.",
+        step_3: "<strong>Смотрите историю</strong> — блюда сохраняются в дневнике по дням с полным составом.",
+        three_ways: "📸 Три способа добавить блюдо",
+        way_1: "<strong>Фото блюда</strong> — сфотографируйте тарелку, ИИ распознает еду и посчитает КБЖУ.",
+        way_2: "<strong>Фото упаковки</strong> — направьте камеру на этикетку, приложение считает цифры.",
+        way_3: "<strong>Текстом</strong> — напишите название и граммы, ИИ вернёт точный расчёт.",
+        screen_today_title: "📅 Экран «Сегодня»",
+        screen_today_desc: "Все блюда за день в одном списке. Нажмите на блюдо, чтобы увидеть состав ингредиентов. Фото удаляются через 24 часа.",
+        screen_history_title: "📆 Экран «История»",
+        screen_history_desc: "Календарь с цветовой разметкой: зелёный — норма соблюдена, красный — превышена. Переключайте периоды для сравнения.",
+        screen_ingredients_title: "📋 Экран «Ингредиенты»",
+        screen_ingredients_desc: "Сводная таблица ингредиентов за выбранный период. Самые калорийные продукты отображаются в топе списка.",
+        personal_norm_title: "🎯 Персональная норма",
+        personal_norm_desc: "Укажите параметры и цель. Приложение рассчитает индивидуальную норму калорий и БЖУ. Данные можно обновить в профиле.",
+        extra_title: "⚙️ Дополнительно",
+        extra_1: "Поддержка 8 языков интерфейса",
+        extra_2: "Вход по email — без спама",
+        extra_3: "Работает быстро и без сложных настроек",
+        for_whom_title: "Для кого это приложение?",
+        for_whom_1: "Для тех, кто хочет похудеть",
+        for_whom_2: "Для тех, кто набирает массу",
+        for_whom_3: "Для тех, кто изучает свой рацион",
+        for_whom_4: "Для тех, кто ценит своё время",
+        download_cta: "Скачайте <strong>CalorieSnap</strong> — и начните понимать своё питание уже сегодня.",
+        privacy_policy: "Политика конфиденциальности"
+      },
+      uk: {
+        hero_title: "— щоденник харчування з ШІ",
+        hero_subtitle: "Фото їжі → КБЖВ за секунди. Норма, історія, склад.",
+        btn_download: "Завантажити в Google Play",
+        features_intro: "Втомилися вручну записувати кожен продукт? <strong>CalorieSnap</strong> — лічильник калорій з ШІ, який робить ведення щоденника простим. Сфотографуйте страву, напишіть її назву або покажіть склад на упаковці — штучний інтелект усе порахує.",
+        how_it_works: "✨ Як це працює",
+        three_steps: "Три кроки — і готово:",
+        step_1: "<strong>Додайте страву</strong> — сфотографуйте їжу, упаковку або напишіть «банан 150 г».",
+        step_2: "<strong>ШІ рахує за вас</strong> — нейромережа визначає інгредієнти та повертає КБЖВ.",
+        step_3: "<strong>Дивіться історію</strong> — страви зберігаються у щоденнику по днях.",
+        three_ways: "📸 Три способи додати страву",
+        way_1: "<strong>Фото страви</strong> — сфотографуйте тарілку, ШІ розпізнає їжу та порахує КБЖВ.",
+        way_2: "<strong>Фото упаковки</strong> — направте камеру на етикетку, додаток зчитає цифри.",
+        way_3: "<strong>Текстом</strong> — напишіть назву та грами, ШІ поверне точний розрахунок.",
+        screen_today_title: "📅 Екран «Сьогодні»",
+        screen_today_desc: "Усі страви за день в одному списку. Натисніть на страву, щоб побачити склад. Фото видаляються через 24 години.",
+        screen_history_title: "📆 Екран «Історія»",
+        screen_history_desc: "Календар з колірною розміткою: зелений — норма дотримана, червоний — перевищена. Перемикайте періоди для порівняння.",
+        screen_ingredients_title: "📋 Екран «Інгредієнти»",
+        screen_ingredients_desc: "Зведена таблиця інгредієнтів за обраний період. Найкалорійніші продукти відображаються в топі.",
+        personal_norm_title: "🎯 Персональна норма",
+        personal_norm_desc: "Вкажіть параметри та ціль. Додаток розрахує індивідуальну норму калорій. Дані можна оновити у профілі.",
+        extra_title: "⚙️ Додатково",
+        extra_1: "Підтримка 8 мов інтерфейсу",
+        extra_2: "Вхід через email — без спаму",
+        extra_3: "Працює швидко і без складних налаштувань",
+        for_whom_title: "Для кого цей додаток?",
+        for_whom_1: "Для тих, хто хоче схуднути",
+        for_whom_2: "Для тих, хто набирає масу",
+        for_whom_3: "Для тих, хто вивчає свій раціон",
+        for_whom_4: "Для тих, хто цінує свій час",
+        download_cta: "Завантажте <strong>CalorieSnap</strong> — і почніть розуміти своє харчування вже сьогодні.",
+        privacy_policy: "Політика конфіденційності"
+      },
+      en: {
+        hero_title: "— AI food diary",
+        hero_subtitle: "Food photo → Macros in seconds. Goals, history, ingredients.",
+        btn_download: "Get it on Google Play",
+        features_intro: "Tired of manually logging every meal? <strong>CalorieSnap</strong> is an AI calorie counter that makes journaling easy. Take a photo of your food, type its name, or scan a nutrition label—the AI does the math for you.",
+        how_it_works: "✨ How it works",
+        three_steps: "Three steps and you're done:",
+        step_1: "<strong>Add a meal</strong> — snap a photo of food, scan a label, or type 'banana 150g'.",
+        step_2: "<strong>AI calculates</strong> — the neural network identifies ingredients and returns macros.",
+        step_3: "<strong>View history</strong> — meals are saved in your daily diary with full details.",
+        three_ways: "📸 Three ways to add food",
+        way_1: "<strong>Food photo</strong> — snap a plate, AI recognizes it and counts macros.",
+        way_2: "<strong>Package photo</strong> — point the camera at a label to extract data.",
+        way_3: "<strong>Text</strong> — type the name and weight for an exact calculation.",
+        screen_today_title: "📅 'Today' Screen",
+        screen_today_desc: "All your meals for the day in one list. Tap a meal to see its ingredients. Photos are deleted after 24 hours.",
+        screen_history_title: "📆 'History' Screen",
+        screen_history_desc: "Color-coded calendar: green means goal met, red means exceeded. Switch periods to compare intake.",
+        screen_ingredients_title: "📋 'Ingredients' Screen",
+        screen_ingredients_desc: "Summary table of ingredients for a selected period. Your highest-calorie foods appear at the top.",
+        personal_norm_title: "🎯 Personal goals",
+        personal_norm_desc: "Enter your stats and goal. The app calculates your daily calorie and macro limits. Update anytime in your profile.",
+        extra_title: "⚙️ Additional features",
+        extra_1: "Supports 8 languages",
+        extra_2: "Email login — no spam",
+        extra_3: "Fast and straightforward",
+        for_whom_title: "Who is this app for?",
+        for_whom_1: "Those wanting to lose weight",
+        for_whom_2: "Those building muscle",
+        for_whom_3: "Those tracking their diet",
+        for_whom_4: "Those who value their time",
+        download_cta: "Download <strong>CalorieSnap</strong> and start understanding your nutrition today.",
+        privacy_policy: "Privacy Policy"
+      },
+      es: {
+        hero_title: "— diario de alimentos con IA",
+        hero_subtitle: "Foto de comida → Macros en segundos. Metas, historial.",
+        btn_download: "Descargar en Google Play",
+        features_intro: "¿Cansado de registrar comidas manualmente? <strong>CalorieSnap</strong> es un contador de calorías con IA. Toma una foto, escribe el nombre o escanea una etiqueta: la IA hará los cálculos.",
+        how_it_works: "✨ Cómo funciona",
+        three_steps: "Tres pasos y listo:",
+        step_1: "<strong>Añade comida</strong> — toma una foto, escanea o escribe 'plátano 150g'.",
+        step_2: "<strong>La IA calcula</strong> — identifica ingredientes y devuelve los macros.",
+        step_3: "<strong>Ver historial</strong> — las comidas se guardan en el diario por días.",
+        three_ways: "📸 Tres formas de añadir",
+        way_1: "<strong>Foto de comida</strong> — la IA reconoce el plato y cuenta los macros.",
+        way_2: "<strong>Etiqueta</strong> — escanea la etiqueta nutricional para extraer datos.",
+        way_3: "<strong>Texto</strong> — escribe el nombre y el peso para calcular.",
+        screen_today_title: "📅 Pantalla 'Hoy'",
+        screen_today_desc: "Todas tus comidas del día en una lista. Toca una comida para ver sus ingredientes. Las fotos se borran en 24h.",
+        screen_history_title: "📆 Pantalla 'Historial'",
+        screen_history_desc: "Calendario por colores: verde es meta cumplida, rojo es excedida.",
+        screen_ingredients_title: "📋 Pantalla 'Ingredientes'",
+        screen_ingredients_desc: "Tabla resumen de ingredientes. Los alimentos más calóricos aparecen arriba.",
+        personal_norm_title: "🎯 Metas personales",
+        personal_norm_desc: "Introduce tus datos. La app calcula tus límites de calorías y macros.",
+        extra_title: "⚙️ Características",
+        extra_1: "Soporta 8 idiomas",
+        extra_2: "Inicio de sesión por email",
+        extra_3: "Rápido y sin complicaciones",
+        for_whom_title: "¿Para quién es esta app?",
+        for_whom_1: "Para perder peso",
+        for_whom_2: "Para ganar masa muscular",
+        for_whom_3: "Para analizar la dieta",
+        for_whom_4: "Para quienes valoran su tiempo",
+        download_cta: "Descarga <strong>CalorieSnap</strong> y empieza a entender tu nutrición.",
+        privacy_policy: "Política de privacidad"
+      },
+      de: {
+        hero_title: "— KI-Ernährungstagebuch",
+        hero_subtitle: "Lebensmittelfoto → Makros in Sekunden. Ziele, Verlauf.",
+        btn_download: "Jetzt bei Google Play",
+        features_intro: "Keine Lust mehr, alles manuell einzutragen? <strong>CalorieSnap</strong> ist ein KI-Kalorienzähler. Mach ein Foto, tippe den Namen oder scanne ein Etikett – die KI rechnet für dich.",
+        how_it_works: "✨ Wie es funktioniert",
+        three_steps: "In drei Schritten fertig:",
+        step_1: "<strong>Mahlzeit hinzufügen</strong> — Foto machen, scannen oder 'Banane 150g' tippen.",
+        step_2: "<strong>KI berechnet</strong> — Identifiziert Zutaten und liefert Makros.",
+        step_3: "<strong>Verlauf ansehen</strong> — Mahlzeiten werden im Tagebuch gespeichert.",
+        three_ways: "📸 Drei Wege zum Hinzufügen",
+        way_1: "<strong>Lebensmittelfoto</strong> — KI erkennt das Gericht und zählt Makros.",
+        way_2: "<strong>Verpackung</strong> — Scanne das Etikett für Nährwerte.",
+        way_3: "<strong>Text</strong> — Tippe Name und Gewicht für genaue Berechnung.",
+        screen_today_title: "📅 'Heute'-Bildschirm",
+        screen_today_desc: "Alle Mahlzeiten des Tages. Tippe für Details. Fotos werden nach 24h gelöscht.",
+        screen_history_title: "📆 'Verlauf'-Bildschirm",
+        screen_history_desc: "Farbiger Kalender: Grün = Ziel erreicht, Rot = überschritten.",
+        screen_ingredients_title: "📋 'Zutaten'-Bildschirm",
+        screen_ingredients_desc: "Zusammenfassung der Zutaten. Kalorienreichste Lebensmittel stehen oben.",
+        personal_norm_title: "🎯 Persönliche Ziele",
+        personal_norm_desc: "Gib deine Daten ein. Die App berechnet dein Kalorien- und Makroziel.",
+        extra_title: "⚙️ Zusätzliche Funktionen",
+        extra_1: "Unterstützt 8 Sprachen",
+        extra_2: "E-Mail-Login — kein Spam",
+        extra_3: "Schnell und unkompliziert",
+        for_whom_title: "Für wen ist diese App?",
+        for_whom_1: "Zum Abnehmen",
+        for_whom_2: "Für Muskelaufbau",
+        for_whom_3: "Zur Überwachung der Ernährung",
+        for_whom_4: "Für alle, die Zeit sparen wollen",
+        download_cta: "Lade <strong>CalorieSnap</strong> herunter und verstehe deine Ernährung.",
+        privacy_policy: "Datenschutzrichtlinie"
+      },
+      pl: {
+        hero_title: "— dziennik żywieniowy AI",
+        hero_subtitle: "Zdjęcie jedzenia → Makro w sekundy. Cel, historia.",
+        btn_download: "Pobierz z Google Play",
+        features_intro: "Masz dość ręcznego wpisywania? <strong>CalorieSnap</strong> to licznik kalorii AI. Zrób zdjęcie, wpisz nazwę lub zeskanuj etykietę — sztuczna inteligencja policzy za Ciebie.",
+        how_it_works: "✨ Jak to działa",
+        three_steps: "Trzy kroki i gotowe:",
+        step_1: "<strong>Dodaj posiłek</strong> — zrób zdjęcie, zeskanuj lub wpisz 'banan 150g'.",
+        step_2: "<strong>AI oblicza</strong> — rozpoznaje składniki i podaje makro.",
+        step_3: "<strong>Historia</strong> — posiłki są zapisywane w dzienniku.",
+        three_ways: "📸 Trzy sposoby dodawania",
+        way_1: "<strong>Zdjęcie</strong> — AI rozpoznaje danie i liczy kalorie.",
+        way_2: "<strong>Opakowanie</strong> — zeskanuj etykietę z makroskładnikami.",
+        way_3: "<strong>Tekst</strong> — wpisz nazwę i wagę.",
+        screen_today_title: "📅 Ekran 'Dzisiaj'",
+        screen_today_desc: "Wszystkie posiłki z dnia. Kliknij, aby zobaczyć detale. Zdjęcia znikają po 24h.",
+        screen_history_title: "📆 Ekran 'Historia'",
+        screen_history_desc: "Kolorowy kalendarz: zielony = cel osiągnięty, czerwony = przekroczony.",
+        screen_ingredients_title: "📋 Ekran 'Składniki'",
+        screen_ingredients_desc: "Tabela składników. Najbardziej kaloryczne produkty są na górze.",
+        personal_norm_title: "🎯 Cele osobiste",
+        personal_norm_desc: "Wprowadź swoje dane. Aplikacja obliczy Twoje zapotrzebowanie.",
+        extra_title: "⚙️ Dodatkowo",
+        extra_1: "Obsługa 8 języków",
+        extra_2: "Logowanie e-mail — bez spamu",
+        extra_3: "Szybko i prosto",
+        for_whom_title: "Dla kogo jest ta aplikacja?",
+        for_whom_1: "Dla odchudzających się",
+        for_whom_2: "Dla budujących masę",
+        for_whom_3: "Do analizy diety",
+        for_whom_4: "Dla oszczędzających czas",
+        download_cta: "Pobierz <strong>CalorieSnap</strong> i poznaj swoje odżywianie.",
+        privacy_policy: "Polityka prywatności"
+      },
+      ja: {
+        hero_title: "— AI食事日記",
+        hero_subtitle: "食べ物の写真 → 数秒でマクロ栄養素を計算。目標、履歴。",
+        btn_download: "Google Playでダウンロード",
+        features_intro: "手動での入力に疲れた？<strong>CalorieSnap</strong> はAIカロリーカウンターです。写真を撮る、名前を入力する、またはラベルをスキャンするだけ。AIが計算します。",
+        how_it_works: "✨ 使い方",
+        three_steps: "3つのステップで完了：",
+        step_1: "<strong>食事を追加</strong> — 写真を撮る、スキャン、または「バナナ150g」と入力。",
+        step_2: "<strong>AIが計算</strong> — 成分を特定し、マクロ栄養素を提示。",
+        step_3: "<strong>履歴</strong> — 食事は日記に保存されます。",
+        three_ways: "📸 3つの追加方法",
+        way_1: "<strong>写真</strong> — AIが料理を認識しカロリーを計算。",
+        way_2: "<strong>パッケージ</strong> — マクロ栄養素のラベルをスキャン。",
+        way_3: "<strong>テキスト</strong> — 名前と重量を入力。",
+        screen_today_title: "📅 「今日」画面",
+        screen_today_desc: "1日の食事リスト。クリックして詳細を表示。写真は24時間後に消去されます。",
+        screen_history_title: "📆 「履歴」画面",
+        screen_history_desc: "色分けされたカレンダー：緑＝目標達成、赤＝超過。",
+        screen_ingredients_title: "📋 「成分」画面",
+        screen_ingredients_desc: "成分表。最もカロリーの高い製品が上位に表示されます。",
+        personal_norm_title: "🎯 個人の目標",
+        personal_norm_desc: "データを入力。アプリが必要量を計算します。",
+        extra_title: "⚙️ その他の機能",
+        extra_1: "8言語対応",
+        extra_2: "メールログイン — スパムなし",
+        extra_3: "高速かつシンプル",
+        for_whom_title: "対象ユーザー",
+        for_whom_1: "減量中の方",
+        for_whom_2: "筋肉を増やしたい方",
+        for_whom_3: "食事を分析したい方",
+        for_whom_4: "時間を節約したい方",
+        download_cta: "<strong>CalorieSnap</strong>をダウンロードして、食生活を理解しましょう。",
+        privacy_policy: "プライバシーポリシー"
+      },
+      zh: {
+        hero_title: "— AI饮食日记",
+        hero_subtitle: "食物照片 → 几秒钟内出宏量营养素。目标，历史。",
+        btn_download: "在 Google Play 下载",
+        features_intro: "厌倦了手动输入？<strong>CalorieSnap</strong> 是一个AI卡路里计数器。拍照、输入名称或扫描标签 —— 人工智能会为你计算。",
+        how_it_works: "✨ 如何运作",
+        three_steps: "三个步骤，轻松搞定：",
+        step_1: "<strong>添加餐点</strong> — 拍照，扫描或输入 '香蕉 150g'。",
+        step_2: "<strong>AI 计算</strong> — 识别成分并提供宏量营养素。",
+        step_3: "<strong>历史记录</strong> — 餐点保存在日记中。",
+        three_ways: "📸 三种添加方式",
+        way_1: "<strong>照片</strong> — AI 识别菜肴并计算卡路里。",
+        way_2: "<strong>包装</strong> — 扫描带有宏量营养素的标签。",
+        way_3: "<strong>文本</strong> — 输入名称和重量。",
+        screen_today_title: "📅 “今日” 屏幕",
+        screen_today_desc: "当天的所有餐点。点击查看详情。照片在 24 小时后消失。",
+        screen_history_title: "📆 “历史” 屏幕",
+        screen_history_desc: "彩色日历：绿色 = 达到目标，红色 = 超标。",
+        screen_ingredients_title: "📋 “成分” 屏幕",
+        screen_ingredients_desc: "成分表。卡路里最高的食物排在最前面。",
+        personal_norm_title: "🎯 个人目标",
+        personal_norm_desc: "输入您的数据。应用程序将计算您的需求量。",
+        extra_title: "⚙️ 附加功能",
+        extra_1: "支持 8 种语言",
+        extra_2: "电子邮件登录 — 无垃圾邮件",
+        extra_3: "快速简单",
+        for_whom_title: "这个应用程序适合谁？",
+        for_whom_1: "适合想要减肥的人",
+        for_whom_2: "适合想要增肌的人",
+        for_whom_3: "用于饮食分析",
+        for_whom_4: "适合想要节省时间的人",
+        download_cta: "下载 <strong>CalorieSnap</strong>，了解你的营养摄入。",
+        privacy_policy: "隐私政策"
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const langSwitcher = document.getElementById('lang-switcher');
+      
+      let currentLang = localStorage.getItem('app_lang') || navigator.language.slice(0, 2);
+      if (!translations[currentLang]) {
+        currentLang = 'ru'; 
+      }
+      
+      langSwitcher.value = currentLang;
+
+      const updateContent = (lang) => {
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+          const key = element.getAttribute('data-i18n');
+          if (translations[lang] && translations[lang][key]) {
+            element.innerHTML = translations[lang][key];
+          }
+        });
+        document.documentElement.lang = lang;
+      };
+
+      langSwitcher.addEventListener('change', (e) => {
+        const newLang = e.target.value;
+        localStorage.setItem('app_lang', newLang);
+        updateContent(newLang);
+      });
+
+      updateContent(currentLang);
+    });
+  </script>
+</body>
+</html>
