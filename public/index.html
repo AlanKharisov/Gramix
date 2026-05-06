@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalorieSnap — Дневник питания с ИИ</title>
+  <title>Gramix — Дневник питания с ИИ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -11,16 +11,32 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #121212;
-      --primary: #dd1510;
-      --text: #ffffff;
-      --secondary: #b3b3b3;
-      --card-border: #222222;
+      --brand-mint: oklch(0.72 0.2 170);
+      --brand-mint-deep: oklch(0.55 0.18 170);
+      --brand-mint-glow: oklch(0.72 0.2 170 / 0.15);
+      --brand-peach: oklch(0.75 0.15 30);
+      --brand-peach-deep: oklch(0.55 0.12 30);
+      --brand-lilac: oklch(0.72 0.15 280);
+      --brand-lilac-deep: oklch(0.52 0.15 280);
+      --brand-coral: oklch(0.7 0.18 15);
+      --brand-coral-deep: oklch(0.52 0.15 15);
+      --brand-green: oklch(0.65 0.18 150);
+      --brand-green-deep: oklch(0.48 0.15 150);
+      
+      --bg-base: #0E1410;
+      --surface-1: #161D18;
+      --surface-2: #1F2823;
+      --line-soft: rgba(255,255,255,0.07);
+      --line-strong: rgba(255,255,255,0.12);
+      
+      --text-primary: #ECF1ED;
+      --text-dim: #8C9690;
+      --text-mute: #5C6660;
     }
 
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-base);
+      color: var(--text-primary);
       font-family: 'Inter', sans-serif;
       font-size: 16px;
       line-height: 1.7;
@@ -36,13 +52,12 @@
       margin: 0 auto;
     }
 
-    .logo { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; }
-    .logo span { color: var(--primary); }
+    .logo { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; color: var(--brand-mint); }
 
     .lang-selector {
-      background: #222;
-      color: var(--text);
-      border: 1px solid var(--card-border);
+      background: var(--surface-2);
+      color: var(--text-primary);
+      border: 1px solid var(--line-strong);
       padding: 6px 12px;
       border-radius: 6px;
       font-family: 'Inter', sans-serif;
@@ -64,13 +79,12 @@
       line-height: 1.15;
       letter-spacing: -1px;
       margin-bottom: 14px;
+      color: var(--brand-mint);
     }
-
-    .hero h1 span { color: var(--primary); }
 
     .hero > p {
       font-size: 1rem;
-      color: var(--secondary);
+      color: var(--text-dim);
       margin-bottom: 28px;
       line-height: 1.7;
     }
@@ -79,8 +93,8 @@
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      background: var(--primary);
-      color: #fff;
+      background: var(--brand-mint);
+      color: #0E1410;
       font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
       font-weight: 700;
@@ -92,7 +106,7 @@
       transition: background 0.15s;
     }
 
-    .btn-download:hover { background: #c01210; }
+    .btn-download:hover { background: var(--brand-mint-deep); }
 
     .features {
       max-width: 640px;
@@ -101,18 +115,18 @@
     }
 
     .features p {
-      color: var(--secondary);
+      color: var(--text-dim);
       font-size: 0.95rem;
       line-height: 1.75;
       margin-bottom: 16px;
     }
 
-    .features p strong { color: var(--text); }
+    .features p strong { color: var(--text-primary); }
 
     .features h2 {
       font-size: 1.25rem;
       font-weight: 700;
-      color: var(--text);
+      color: var(--text-primary);
       margin: 40px 0 14px;
       letter-spacing: -0.3px;
     }
@@ -120,7 +134,7 @@
     .features h3 {
       font-size: 1rem;
       font-weight: 700;
-      color: var(--text);
+      color: var(--text-primary);
       margin: 32px 0 10px;
     }
 
@@ -138,7 +152,7 @@
 
     .features ol li {
       counter-increment: steps;
-      color: var(--secondary);
+      color: var(--text-dim);
       font-size: 0.95rem;
       line-height: 1.65;
       padding-left: 32px;
@@ -152,8 +166,8 @@
       top: 2px;
       width: 20px;
       height: 20px;
-      background: var(--primary);
-      color: #fff;
+      background: var(--brand-mint);
+      color: #0E1410;
       font-size: 0.7rem;
       font-weight: 700;
       border-radius: 50%;
@@ -163,7 +177,7 @@
     }
 
     .features ul li {
-      color: var(--secondary);
+      color: var(--text-dim);
       font-size: 0.95rem;
       line-height: 1.65;
       padding-left: 18px;
@@ -177,17 +191,17 @@
       top: 11px;
       width: 5px;
       height: 5px;
-      background: var(--primary);
+      background: var(--brand-mint);
       border-radius: 50%;
     }
 
     .features ol li strong,
-    .features ul li strong { color: var(--text); }
+    .features ul li strong { color: var(--text-primary); }
 
     .features > p:last-of-type {
       margin-top: 32px;
       padding-top: 32px;
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid var(--line-strong);
     }
 
     .privacy-link {
@@ -197,12 +211,12 @@
 
     .privacy-link a {
       font-size: 0.82rem;
-      color: #555;
+      color: var(--text-mute);
       text-decoration: none;
       transition: color 0.15s;
     }
 
-    .privacy-link a:hover { color: var(--secondary); }
+    .privacy-link a:hover { color: var(--text-dim); }
 
     @media (max-width: 400px) {
       .hero h1 { font-size: 1.7rem; }
@@ -213,7 +227,7 @@
 <body>
 
   <header>
-    <div class="logo"><span>Calorie</span>Snap</div>
+    <div class="logo">Gramix</div>
     <select id="lang-switcher" class="lang-selector">
   <option value="ru">Русский</option>
   <option value="uk">Українська</option>
@@ -227,7 +241,7 @@
   </header>
 
   <section class="hero">
-    <h1><span>CalorieSnap</span> <span data-i18n="hero_title">— дневник питания с ИИ</span></h1>
+    <h1>Gramix <span data-i18n="hero_title">— дневник питания с ИИ</span></h1>
     <p data-i18n="hero_subtitle">Фото еды → КБЖУ за секунды. Норма, история, состав.</p>
     <a href="#" class="btn-download">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -240,7 +254,7 @@
   <section class="features">
     <p data-i18n="features_intro">
       Устали вручную записывать каждый продукт?
-      <strong>CalorieSnap</strong> — счётчик калорий с ИИ, который делает ведение
+      <strong>Gramix</strong> — счётчик калорий с ИИ, который делает ведение
       дневника питания простым и быстрым. Сфотографируйте блюдо, напишите его
       название или покажите состав на упаковке — искусственный интеллект всё
       посчитает за вас.
@@ -289,7 +303,7 @@
     </ul>
 
     <p data-i18n="download_cta" style="margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--card-border);">
-      Скачайте <strong>CalorieSnap</strong> — и начните понимать своё питание уже сегодня.
+      Скачайте <strong>Gramix</strong> — и начните понимать своё питание уже сегодня.
     </p>
   </section>
 
@@ -303,7 +317,7 @@
         hero_title: "— дневник питания с ИИ",
         hero_subtitle: "Фото еды → КБЖУ за секунды. Норма, история, состав.",
         btn_download: "Скачать в Google Play",
-        features_intro: "Устали вручную записывать каждый продукт? <strong>CalorieSnap</strong> — счётчик калорий с ИИ, который делает ведение дневника питания простым и быстрым. Сфотографируйте блюдо, напишите его название или покажите состав на упаковке — искусственный интеллект всё посчитает за вас.",
+        features_intro: "Устали вручную записывать каждый продукт? <strong>Gramix</strong> — счётчик калорий с ИИ, который делает ведение дневника питания простым и быстрым. Сфотографируйте блюдо, напишите его название или покажите состав на упаковке — искусственный интеллект всё посчитает за вас.",
         how_it_works: "✨ Как это работает",
         three_steps: "Три шага — и готово:",
         step_1: "<strong>Добавьте блюдо</strong> — сфотографируйте еду, упаковку с составом или напишите «банан 150 г».",
@@ -330,14 +344,14 @@
         for_whom_2: "Для тех, кто набирает массу",
         for_whom_3: "Для тех, кто изучает свой рацион",
         for_whom_4: "Для тех, кто ценит своё время",
-        download_cta: "Скачайте <strong>CalorieSnap</strong> — и начните понимать своё питание уже сегодня.",
+        download_cta: "Скачайте <strong>Gramix</strong> — и начните понимать своё питание уже сегодня.",
         privacy_policy: "Политика конфиденциальности"
       },
       uk: {
         hero_title: "— щоденник харчування з ШІ",
         hero_subtitle: "Фото їжі → КБЖВ за секунди. Норма, історія, склад.",
         btn_download: "Завантажити в Google Play",
-        features_intro: "Втомилися вручну записувати кожен продукт? <strong>CalorieSnap</strong> — лічильник калорій з ШІ, який робить ведення щоденника простим. Сфотографуйте страву, напишіть її назву або покажіть склад на упаковці — штучний інтелект усе порахує.",
+        features_intro: "Втомилися вручну записувати кожен продукт? <strong>Gramix</strong> — лічильник калорій з ШІ, який робить ведення щоденника простим. Сфотографуйте страву, напишіть її назву або покажіть склад на упаковці — штучний інтелект усе порахує.",
         how_it_works: "✨ Як це працює",
         three_steps: "Три кроки — і готово:",
         step_1: "<strong>Додайте страву</strong> — сфотографуйте їжу, упаковку або напишіть «банан 150 г».",
@@ -364,14 +378,14 @@
         for_whom_2: "Для тих, хто набирає масу",
         for_whom_3: "Для тих, хто вивчає свій раціон",
         for_whom_4: "Для тих, хто цінує свій час",
-        download_cta: "Завантажте <strong>CalorieSnap</strong> — і почніть розуміти своє харчування вже сьогодні.",
+        download_cta: "Завантажте <strong>Gramix</strong> — і почніть розуміти своє харчування вже сьогодні.",
         privacy_policy: "Політика конфіденційності"
       },
       en: {
         hero_title: "— AI food diary",
         hero_subtitle: "Food photo → Macros in seconds. Goals, history, ingredients.",
         btn_download: "Get it on Google Play",
-        features_intro: "Tired of manually logging every meal? <strong>CalorieSnap</strong> is an AI calorie counter that makes journaling easy. Take a photo of your food, type its name, or scan a nutrition label—the AI does the math for you.",
+        features_intro: "Tired of manually logging every meal? <strong>Gramix</strong> is an AI calorie counter that makes journaling easy. Take a photo of your food, type its name, or scan a nutrition label—the AI does the math for you.",
         how_it_works: "✨ How it works",
         three_steps: "Three steps and you're done:",
         step_1: "<strong>Add a meal</strong> — snap a photo of food, scan a label, or type 'banana 150g'.",
@@ -398,14 +412,14 @@
         for_whom_2: "Those building muscle",
         for_whom_3: "Those tracking their diet",
         for_whom_4: "Those who value their time",
-        download_cta: "Download <strong>CalorieSnap</strong> and start understanding your nutrition today.",
+        download_cta: "Download <strong>Gramix</strong> and start understanding your nutrition today.",
         privacy_policy: "Privacy Policy"
       },
       es: {
         hero_title: "— diario de alimentos con IA",
         hero_subtitle: "Foto de comida → Macros en segundos. Metas, historial.",
         btn_download: "Descargar en Google Play",
-        features_intro: "¿Cansado de registrar comidas manualmente? <strong>CalorieSnap</strong> es un contador de calorías con IA. Toma una foto, escribe el nombre o escanea una etiqueta: la IA hará los cálculos.",
+        features_intro: "¿Cansado de registrar comidas manualmente? <strong>Gramix</strong> es un contador de calorías con IA. Toma una foto, escribe el nombre o escanea una etiqueta: la IA hará los cálculos.",
         how_it_works: "✨ Cómo funciona",
         three_steps: "Tres pasos y listo:",
         step_1: "<strong>Añade comida</strong> — toma una foto, escanea o escribe 'plátano 150g'.",
@@ -432,14 +446,14 @@
         for_whom_2: "Para ganar masa muscular",
         for_whom_3: "Para analizar la dieta",
         for_whom_4: "Para quienes valoran su tiempo",
-        download_cta: "Descarga <strong>CalorieSnap</strong> y empieza a entender tu nutrición.",
+        download_cta: "Descarga <strong>Gramix</strong> y empieza a entender tu nutrición.",
         privacy_policy: "Política de privacidad"
       },
       de: {
         hero_title: "— KI-Ernährungstagebuch",
         hero_subtitle: "Lebensmittelfoto → Makros in Sekunden. Ziele, Verlauf.",
         btn_download: "Jetzt bei Google Play",
-        features_intro: "Keine Lust mehr, alles manuell einzutragen? <strong>CalorieSnap</strong> ist ein KI-Kalorienzähler. Mach ein Foto, tippe den Namen oder scanne ein Etikett – die KI rechnet für dich.",
+        features_intro: "Keine Lust mehr, alles manuell einzutragen? <strong>Gramix</strong> ist ein KI-Kalorienzähler. Mach ein Foto, tippe den Namen oder scanne ein Etikett – die KI rechnet für dich.",
         how_it_works: "✨ Wie es funktioniert",
         three_steps: "In drei Schritten fertig:",
         step_1: "<strong>Mahlzeit hinzufügen</strong> — Foto machen, scannen oder 'Banane 150g' tippen.",
@@ -466,14 +480,14 @@
         for_whom_2: "Für Muskelaufbau",
         for_whom_3: "Zur Überwachung der Ernährung",
         for_whom_4: "Für alle, die Zeit sparen wollen",
-        download_cta: "Lade <strong>CalorieSnap</strong> herunter und verstehe deine Ernährung.",
+        download_cta: "Lade <strong>Gramix</strong> herunter und verstehe deine Ernährung.",
         privacy_policy: "Datenschutzrichtlinie"
       },
       pl: {
         hero_title: "— dziennik żywieniowy AI",
         hero_subtitle: "Zdjęcie jedzenia → Makro w sekundy. Cel, historia.",
         btn_download: "Pobierz z Google Play",
-        features_intro: "Masz dość ręcznego wpisywania? <strong>CalorieSnap</strong> to licznik kalorii AI. Zrób zdjęcie, wpisz nazwę lub zeskanuj etykietę — sztuczna inteligencja policzy za Ciebie.",
+        features_intro: "Masz dość ręcznego wpisywania? <strong>Gramix</strong> to licznik kalorii AI. Zrób zdjęcie, wpisz nazwę lub zeskanuj etykietę — sztuczna inteligencja policzy za Ciebie.",
         how_it_works: "✨ Jak to działa",
         three_steps: "Trzy kroki i gotowe:",
         step_1: "<strong>Dodaj posiłek</strong> — zrób zdjęcie, zeskanuj lub wpisz 'banan 150g'.",
@@ -500,14 +514,14 @@
         for_whom_2: "Dla budujących masę",
         for_whom_3: "Do analizy diety",
         for_whom_4: "Dla oszczędzających czas",
-        download_cta: "Pobierz <strong>CalorieSnap</strong> i poznaj swoje odżywianie.",
+        download_cta: "Pobierz <strong>Gramix</strong> i poznaj swoje odżywianie.",
         privacy_policy: "Polityka prywatności"
       },
       ja: {
         hero_title: "— AI食事日記",
         hero_subtitle: "食べ物の写真 → 数秒でマクロ栄養素を計算。目標、履歴。",
         btn_download: "Google Playでダウンロード",
-        features_intro: "手動での入力に疲れた？<strong>CalorieSnap</strong> はAIカロリーカウンターです。写真を撮る、名前を入力する、またはラベルをスキャンするだけ。AIが計算します。",
+        features_intro: "手動での入力に疲れた？<strong>Gramix</strong> はAIカロリーカウンターです。写真を撮る、名前を入力する、またはラベルをスキャンするだけ。AIが計算します。",
         how_it_works: "✨ 使い方",
         three_steps: "3つのステップで完了：",
         step_1: "<strong>食事を追加</strong> — 写真を撮る、スキャン、または「バナナ150g」と入力。",
@@ -534,14 +548,14 @@
         for_whom_2: "筋肉を増やしたい方",
         for_whom_3: "食事を分析したい方",
         for_whom_4: "時間を節約したい方",
-        download_cta: "<strong>CalorieSnap</strong>をダウンロードして、食生活を理解しましょう。",
+        download_cta: "<strong>Gramix</strong>をダウンロードして、食生活を理解しましょう。",
         privacy_policy: "プライバシーポリシー"
       },
       zh: {
         hero_title: "— AI饮食日记",
         hero_subtitle: "食物照片 → 几秒钟内出宏量营养素。目标，历史。",
         btn_download: "在 Google Play 下载",
-        features_intro: "厌倦了手动输入？<strong>CalorieSnap</strong> 是一个AI卡路里计数器。拍照、输入名称或扫描标签 —— 人工智能会为你计算。",
+        features_intro: "厌倦了手动输入？<strong>Gramix</strong> 是一个AI卡路里计数器。拍照、输入名称或扫描标签 —— 人工智能会为你计算。",
         how_it_works: "✨ 如何运作",
         three_steps: "三个步骤，轻松搞定：",
         step_1: "<strong>添加餐点</strong> — 拍照，扫描或输入 '香蕉 150g'。",
@@ -568,7 +582,7 @@
         for_whom_2: "适合想要增肌的人",
         for_whom_3: "用于饮食分析",
         for_whom_4: "适合想要节省时间的人",
-        download_cta: "下载 <strong>CalorieSnap</strong>，了解你的营养摄入。",
+        download_cta: "下载 <strong>Gramix</strong>，了解你的营养摄入。",
         privacy_policy: "隐私政策"
       }
     };
